@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>WebSocket test app</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+    <body style="color: greenyellow; background: black">
+        <script>
+            var url = window.location.href.replace("http","ws").replace("index.html","") + "socket";
+            var ws = new WebSocket(url);
+            
+            ws.onopen = function(event){
+                var message = '<p style="color:red;">connected to ' + url + '</p>';
+                document.getElementById('tso').innerHTML += message;
+            };
+            
+            ws.onclose= function(event){
+                document.getElementById('tso').innerHTML += '<p style="color:red;">socket closed</p>';
+            }
+            
+            ws.onmessage = function(event){
+                var message = event.data + "<br/>";
+                document.getElementById('tso').innerHTML += message;
+                console.log("received " + event.data);
+            };
+            
+            ws.onerror = function(event){
+                var error = '<p style="color:red;">error: ' + event.data + '</p>';
+                document.getElementById('tso').innerHTML += error;
+                console.log("error " + event.data);
+            };
+            
+            function sendText(){
+                var input = document.getElementById("st");
+                ws.send(input.value);
+                input.value="";
+            }
+        </script>
+        <h1>WebSocket test app</h1>
+        <input id ="st" type="text"   value="text to send" style="width: 400px">
+        <input type="button" value="send" onclick="sendText()">
+        <h2>output</h2>
+        Below output is returned by the server into your websocket connection:<br/>
+        <ul>
+            <li>the current date/time each second</li>
+            <li>anything you send to the server using the above form</li>
+        </ul>
+        Requesting this page through https tests secure websocket functionality (wss)
+        <div id = "tso" style="color: green; background: darkslategrey; font-family: monospace" onclick="this.innerHTML=''">
+            <p style="color: blue">click to clear</p>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,3 @@
+<jboss-web>
+    <context-root>websocket-test-app</context-root>
+</jboss-web>
